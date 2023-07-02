@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+   netease_music:
+      stdin_open: true
+      tty: true
+      command: [/bin/bash]
+      image: registry.cn-hangzhou.aliyuncs.com/c6supper/netease_music_env:${NETEASE_MUSIC_ENV_TAG}
+      container_name: netease_music_env
+      cap_add:
+         - SYS_ADMIN 
+      network_mode: ${APP_NETWORK_MODE}
+      devices:
+        - /dev/dri:/dev/dri
+        - /dev/snd:/dev/snd
+      volumes:
+        - /tmp/.X11-unix:/tmp/.X11-unix
+      restart: ${APP_RESTART_POLICY}
+      environment:
+         RUN_AFTER_SIDECAR: 'no'
+         APP_USER: ${APP_USER}
+         PASS: ${PASS}
+         DISPLAY: ${DISPLAY}
+      logging:
+         driver: ${APP_LOGGING_DRIVER}
+         options:
+            max-size: ${APP_LOGGING_SIZE}
+            max-file: ${APP_LOGGING_NUMBER}
